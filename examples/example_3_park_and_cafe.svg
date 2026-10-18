@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" 
+     xmlns:xlink="http://www.w3.org/1999/xlink" 
+     viewBox="0 0 1200 800" 
+     width="1200" 
+     height="800">
+  <title>Летний отдых в городском парке</title>
+  <desc>Собрано из элементов: Зеленая терраса (Зонт), Пикник (Корзина), Скейт-парк (Скейтборд, бумбокс), Площадка для питомцев (Корги)</desc>
+  <rect width="1200" height="800" fill="#ecfdf5" />
+  <rect x="0" y="580" width="1200" height="220" fill="#10b981" />
+
+  <!-- Пляжный зонт (из Зеленой террасы) -->
+  <g transform="translate(180, 240)">
+    <svg width="260" height="380" viewBox="210 140 220 335" preserveAspectRatio="xMidYMid meet">
+      <path d="M220,240 Q320,130 420,240 Z" fill="#EF4444"/>
+      <path d="M220,240 Q270,180 320,240 Z" fill="#FFFFFF"/>
+      <path d="M320,240 Q370,180 420,240 Z" fill="#FFFFFF"/>
+      <line x1="320" y1="240" x2="320" y2="470" stroke="#64748B" stroke-width="8"/>
+    </svg>
+  </g>
+
+  <!-- Корзина для пикника (из Пикника на траве) -->
+  <g transform="translate(380, 520)">
+    <svg width="140" height="140" viewBox="350 365 110 115" preserveAspectRatio="xMidYMid meet">
+      <polygon points="360,470 370,410 440,410 450,470" fill="#D97706" stroke="#92400E" stroke-width="3"/>
+      <path d="M380,410 Q405,370 430,410" stroke="#92400E" stroke-width="5" fill="none"/>
+    </svg>
+  </g>
+
+  <!-- Веселая собака корги (из Площадки для питомцев) -->
+  <g transform="translate(560, 480)">
+    <svg width="220" height="190" viewBox="305 305 185 175" preserveAspectRatio="xMidYMid meet">
+      <rect x="320" y="380" width="130" height="70" rx="30" fill="#F59E0B"/>
+      <ellipse cx="440" cy="360" rx="32" ry="26" fill="#F59E0B"/>
+      <polygon points="460,355 480,365 460,375" fill="#FFFFFF"/>
+      <circle cx="478" cy="365" r="5" fill="#0F172A"/>
+      <polygon points="420,345 428,310 442,340" fill="#F59E0B"/>
+      <polygon points="445,340 458,310 465,345" fill="#F59E0B"/>
+      <rect x="335" y="440" width="16" height="35" rx="6" fill="#FFFFFF"/>
+      <rect x="365" y="440" width="16" height="35" rx="6" fill="#FFFFFF"/>
+      <rect x="410" y="440" width="16" height="35" rx="6" fill="#FFFFFF"/>
+      <circle cx="315" cy="390" r="10" fill="#FFFFFF"/>
+    </svg>
+  </g>
+
+  <!-- Бумбокс магнитола (из Скейт-парка) -->
+  <g transform="translate(830, 490)">
+    <svg width="180" height="130" viewBox="460 350 180 130" preserveAspectRatio="xMidYMid meet">
+      <rect x="470" y="380" width="160" height="90" rx="10" fill="#1E293B"/>
+      <circle cx="510" cy="425" r="26" fill="#3B82F6" stroke="#93C5FD" stroke-width="4"/>
+      <circle cx="590" cy="425" r="26" fill="#3B82F6" stroke="#93C5FD" stroke-width="4"/>
+      <rect x="535" y="390" width="30" height="20" rx="3" fill="#64748B"/>
+      <path d="M510,380 L510,360 L590,360 L590,380" stroke="#64748B" stroke-width="6" fill="none"/>
+    </svg>
+  </g>
+
+  <!-- Скейтборд (из Скейт-парка) -->
+  <g transform="translate(810, 600)">
+    <svg width="200" height="70" viewBox="240 405 160 55" preserveAspectRatio="xMidYMid meet">
+      <path d="M250,420 Q320,430 390,420" stroke="#8B5CF6" stroke-width="14" stroke-linecap="round" fill="none"/>
+      <circle cx="270" cy="445" r="12" fill="#F59E0B"/>
+      <circle cx="370" cy="445" r="12" fill="#F59E0B"/>
+    </svg>
+  </g>
+</svg>

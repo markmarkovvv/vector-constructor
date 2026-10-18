@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" 
+     xmlns:xlink="http://www.w3.org/1999/xlink" 
+     viewBox="0 0 1200 800" 
+     width="1200" 
+     height="800">
+  <title>Творческая мастерская художника и разработчика</title>
+  <desc>Собрано из элементов: Офис разработчика (Монитор, лампа, кактус), Студия живописи (Мольберт), Книжный уголок (Кресло, Кот)</desc>
+  <rect width="1200" height="800" fill="#fdf4ff" />
+  <rect x="0" y="620" width="1200" height="180" fill="#f5d0fe" />
+
+  <!-- Мольберт с картиной (из Студии живописи) -->
+  <g transform="translate(120, 240)">
+    <svg width="280" height="420" viewBox="220 155 220 340" preserveAspectRatio="xMidYMid meet">
+      <line x1="330" y1="180" x2="260" y2="490" stroke="#78350F" stroke-width="8"/>
+      <line x1="330" y1="180" x2="400" y2="490" stroke="#78350F" stroke-width="8"/>
+      <line x1="330" y1="160" x2="330" y2="490" stroke="#92400E" stroke-width="8"/>
+      <rect x="250" y="220" width="160" height="130" rx="4" fill="#FFFFFF" stroke="#D97706" stroke-width="6"/>
+      <circle cx="330" cy="270" r="26" fill="#F59E0B"/>
+      <polygon points="260,330 310,280 350,330" fill="#10B981"/>
+      <polygon points="320,330 360,290 400,330" fill="#059669"/>
+      <rect x="230" y="345" width="200" height="12" rx="4" fill="#78350F"/>
+    </svg>
+  </g>
+
+  <!-- Рабочий стол и iMac (из Офиса разработчика) -->
+  <g transform="translate(480, 290)">
+    <svg width="280" height="230" viewBox="305 185 210 185" preserveAspectRatio="xMidYMid meet">
+      <rect x="310" y="190" width="200" height="130" rx="8" fill="#1E293B"/>
+      <rect x="318" y="198" width="184" height="114" rx="4" fill="#3B82F6"/>
+      <polygon points="340,240 380,240 370,280 330,280" fill="#FFFFFF" opacity="0.3"/>
+      <rect x="395" y="320" width="30" height="40" fill="#64748B"/>
+      <rect x="375" y="356" width="70" height="6" rx="3" fill="#475569"/>
+      <rect x="340" y="368" width="120" height="10" rx="3" fill="#E2E8F0"/>
+    </svg>
+  </g>
+
+  <!-- Настольная лампа -->
+  <g transform="translate(420, 360)">
+    <svg width="120" height="180" viewBox="200 220 90 150" preserveAspectRatio="xMidYMid meet">
+      <ellipse cx="230" cy="365" rx="24" ry="6" fill="#F59E0B"/>
+      <path d="M230,362 L220,290 L260,240" stroke="#D97706" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M245,225 L285,255 L255,275 Z" fill="#F59E0B"/>
+    </svg>
+  </g>
+
+  <!-- Кактус на столе -->
+  <g transform="translate(740, 420)">
+    <svg width="90" height="140" viewBox="555 275 55 95" preserveAspectRatio="xMidYMid meet">
+      <polygon points="560,366 565,330 595,330 600,366" fill="#EA580C"/>
+      <rect x="572" y="280" width="16" height="50" rx="8" fill="#10B981"/>
+      <path d="M565,300 L572,300 M588,295 L595,295" stroke="#10B981" stroke-width="6" stroke-linecap="round"/>
+    </svg>
+  </g>
+
+  <!-- Мягкое кресло (из Книжного уголка) -->
+  <g transform="translate(860, 350)">
+    <svg width="240" height="280" viewBox="420 255 200 225" preserveAspectRatio="xMidYMid meet">
+      <path d="M460,320 Q460,260 520,260 Q580,260 580,320 L580,420 L460,420 Z" fill="#8B5CF6"/>
+      <rect x="430" y="340" width="40" height="70" rx="10" fill="#7C3AED"/>
+      <rect x="570" y="340" width="40" height="70" rx="10" fill="#7C3AED"/>
+      <rect x="470" y="390" width="100" height="35" rx="6" fill="#6D28D9"/>
+      <line x1="470" y1="425" x2="455" y2="475" stroke="#78350F" stroke-width="6"/>
+      <line x1="570" y1="425" x2="585" y2="475" stroke="#78350F" stroke-width="6"/>
+    </svg>
+  </g>
+
+  <!-- Спящий котик на полу возле кресла -->
+  <g transform="translate(890, 560)">
+    <svg width="100" height="75" viewBox="485 355 70 50" preserveAspectRatio="xMidYMid meet">
+      <ellipse cx="520" cy="385" rx="26" ry="18" fill="#F97316"/>
+      <circle cx="500" cy="378" r="14" fill="#EA580C"/>
+      <polygon points="492,368 498,358 504,368" fill="#EA580C"/>
+      <polygon points="506,368 512,358 518,368" fill="#EA580C"/>
+      <path d="M535,395 Q550,385 540,375" stroke="#C2410C" stroke-width="4" fill="none"/>
+    </svg>
+  </g>
+</svg>
