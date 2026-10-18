@@ -14,7 +14,7 @@ class IllustrationController extends Controller
      */
     public function index(): JsonResponse
     {
-        $illustrations = Illustration::select(['id', 'title', 'category', 'description', 'view_box', 'created_at'])
+        $illustrations = Illustration::select(['id', 'title', 'category', 'description', 'view_box', 'svg_content', 'created_at'])
             ->withCount('components')
             ->orderBy('id', 'asc')
             ->get();
