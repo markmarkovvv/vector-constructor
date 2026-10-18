@@ -56,15 +56,16 @@ function resetZoom() {
     <!-- Left: Brand and Title -->
     <div class="flex items-center space-x-3">
       <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-        <Sparkles class="w-5 h-5 text-white" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-white">
+          <rect x="3" y="3" width="18" height="18" rx="4" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <polyline points="21 15 16 10 5 21" />
+        </svg>
       </div>
       <div>
         <div class="flex items-center space-x-2">
           <span class="font-bold text-sm tracking-wide bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">
             VectorCraft
-          </span>
-          <span class="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
-            MVP
           </span>
         </div>
         <input 
