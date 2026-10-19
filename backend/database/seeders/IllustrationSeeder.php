@@ -2,164 +2,27 @@
 
 namespace Database\Seeders;
 
-use App\Models\Component;
-use App\Models\Composition;
 use App\Models\Illustration;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class IllustrationSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Clear previous entries
-        DB::statement('DELETE FROM compositions');
-        DB::statement('DELETE FROM components');
         DB::statement('DELETE FROM illustrations');
 
         $scenes = $this->getScenesData();
 
         foreach ($scenes as $sceneData) {
-            $illustration = Illustration::create([
-                'title' => $sceneData['title'],
-                'category' => $sceneData['category'],
-                'view_box' => '0 0 800 600',
+            Illustration::create([
+                'title'       => $sceneData['title'],
+                'category'    => $sceneData['category'],
+                'view_box'    => '0 0 800 600',
                 'description' => $sceneData['description'],
                 'svg_content' => $sceneData['svg_content'],
             ]);
-
-            // Save pre-extracted components for this illustration
-            if (!empty($sceneData['components'])) {
-                foreach ($sceneData['components'] as $comp) {
-                    Component::create([
-                        'illustration_id' => $illustration->id,
-                        'title' => $comp['title'],
-                        'category' => $comp['category'],
-                        'view_box' => $comp['view_box'] ?? '0 0 200 200',
-                        'width' => $comp['width'] ?? 150,
-                        'height' => $comp['height'] ?? 150,
-                        'svg_content' => $comp['svg_content'],
-                        'tags' => $comp['tags'] ?? [],
-                    ]);
-                }
-            }
         }
-
-        // Create 2 pre-assembled sample compositions to showcase the canvas!
-        $this->createSampleCompositions();
-    }
-
-    private function createSampleCompositions(): void
-    {
-        // Sample composition 1: "Уютный городской вечер"
-        $c1 = Component::where('title', 'Здание кофейни')->first();
-        $c2 = Component::where('title', 'Велосипедист')->first();
-        $c3 = Component::where('title', 'Уличный фонарь')->first();
-        $c4 = Component::where('title', 'Ветвистый дуб')->first();
-        $c5 = Component::where('title', 'Столик со стульями')->first();
-
-        $canvasData1 = [];
-        $z = 1;
-
-        if ($c4) {
-            $canvasData1[] = [
-                'id' => 'elem_demo_1',
-                'component_id' => $c4->id,
-                'title' => $c4->title,
-                'x' => 50,
-                'y' => 120,
-                'width' => 280,
-                'height' => 320,
-                'rotation' => 0,
-                'flipX' => false,
-                'flipY' => false,
-                'zIndex' => $z++,
-                'viewBox' => $c4->view_box,
-                'svgContent' => $c4->svg_content,
-            ];
-        }
-
-        if ($c1) {
-            $canvasData1[] = [
-                'id' => 'elem_demo_2',
-                'component_id' => $c1->id,
-                'title' => $c1->title,
-                'x' => 380,
-                'y' => 150,
-                'width' => 340,
-                'height' => 340,
-                'rotation' => 0,
-                'flipX' => false,
-                'flipY' => false,
-                'zIndex' => $z++,
-                'viewBox' => $c1->view_box,
-                'svgContent' => $c1->svg_content,
-            ];
-        }
-
-        if ($c3) {
-            $canvasData1[] = [
-                'id' => 'elem_demo_3',
-                'component_id' => $c3->id,
-                'title' => $c3->title,
-                'x' => 320,
-                'y' => 220,
-                'width' => 90,
-                'height' => 260,
-                'rotation' => 0,
-                'flipX' => false,
-                'flipY' => false,
-                'zIndex' => $z++,
-                'viewBox' => $c3->view_box,
-                'svgContent' => $c3->svg_content,
-            ];
-        }
-
-        if ($c5) {
-            $canvasData1[] = [
-                'id' => 'elem_demo_4',
-                'component_id' => $c5->id,
-                'title' => $c5->title,
-                'x' => 740,
-                'y' => 310,
-                'width' => 180,
-                'height' => 180,
-                'rotation' => 0,
-                'flipX' => false,
-                'flipY' => false,
-                'zIndex' => $z++,
-                'viewBox' => $c5->view_box,
-                'svgContent' => $c5->svg_content,
-            ];
-        }
-
-        if ($c2) {
-            $canvasData1[] = [
-                'id' => 'elem_demo_5',
-                'component_id' => $c2->id,
-                'title' => $c2->title,
-                'x' => 180,
-                'y' => 320,
-                'width' => 200,
-                'height' => 180,
-                'rotation' => 0,
-                'flipX' => false,
-                'flipY' => false,
-                'zIndex' => $z++,
-                'viewBox' => $c2->view_box,
-                'svgContent' => $c2->svg_content,
-            ];
-        }
-
-        Composition::create([
-            'title' => 'Городской бульвар у кофейни',
-            'canvas_width' => 1000,
-            'canvas_height' => 600,
-            'canvas_data' => $canvasData1,
-        ]);
     }
 
     private function getScenesData(): array

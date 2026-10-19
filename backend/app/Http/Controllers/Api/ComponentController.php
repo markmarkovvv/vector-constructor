@@ -102,6 +102,6 @@ class ComponentController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Компонент удалён из библиотеки',
-        ]);
+        ], 200);
     }
 }

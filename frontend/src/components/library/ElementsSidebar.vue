@@ -9,7 +9,7 @@ import {
   Plus, 
   Sparkles, 
   Boxes,
-  Tag
+  Upload
 } from 'lucide-vue-next';
 
 const elementsStore = useElementsStore();
@@ -17,6 +17,8 @@ const canvasStore = useCanvasStore();
 
 const search = ref('');
 const selectedCat = ref('all');
+const sidebarFileInputRef = ref(null);
+const isUploading = ref(false);
 
 const displayCategories = computed(() => {
   return ['all', ...elementsStore.categories];
@@ -48,11 +50,73 @@ async function handleDelete(e, id) {
     await elementsStore.deleteComponent(id);
   }
 }
+
+function triggerSvgUpload() {
+  sidebarFileInputRef.value?.click();
+}
+
+async function handleSidebarFileUpload(e) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  if (!file.name.toLowerCase().endsWith('.svg') && file.type !== 'image/svg+xml') {
+    alert('Пожалуйста, выберите файл в формате .SVG');
+    return;
+  }
+
+  isUploading.value = true;
+  try {
+    const text = await file.text();
+    if (!text.includes('<svg')) {
+      alert('Выбранный файл не содержит валидной разметки SVG');
+      return;
+    }
+
+    const rawName = file.name.replace(/\.svg$/i, '');
+    const cleanTitle = rawName
+      .replace(/[_-]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .replace(/^\w/, (c) => c.toUpperCase());
+
+    let viewBox = '0 0 800 600';
+    const vbMatch = text.match(/viewBox\s*=\s*["']([^"']+)["']/i);
+    if (vbMatch) {
+      viewBox = vbMatch[1];
+    }
+
+    const newIllustration = await elementsStore.uploadIllustration({
+      title: cleanTitle || 'Загруженная иллюстрация',
+      category: 'Пользовательские',
+      svg_content: text,
+      view_box: viewBox,
+      description: `Пользовательский файл ${file.name} (${Math.round(file.size / 1024)} КБ)`,
+    });
+
+    // Directly open the inspector to extract elements from this SVG!
+    elementsStore.openIllustrationInspector(newIllustration.id);
+  } catch (err) {
+    console.error('Ошибка загрузки SVG:', err);
+    alert('Произошла ошибка при загрузке SVG');
+  } finally {
+    isUploading.value = false;
+    e.target.value = '';
+  }
+}
 </script>
 
 <template>
   <aside class="w-72 border-r border-slate-800 bg-slate-900/90 flex flex-col z-20 select-none">
-    <!-- Header with "Extract from 20 SVG" CTA -->
+    <!-- Hidden file input for uploading custom SVG -->
+    <input 
+      ref="sidebarFileInputRef" 
+      type="file" 
+      accept=".svg,image/svg+xml" 
+      class="hidden" 
+      @change="handleSidebarFileUpload" 
+    />
+
+    <!-- Header with "Extract from 20 SVG" CTA and "Upload SVG" -->
     <div class="p-3.5 border-b border-slate-800 space-y-2.5">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-2">
@@ -64,14 +128,25 @@ async function handleDelete(e, id) {
         </span>
       </div>
 
-      <!-- Action Button: Open 20 Illustrations -->
-      <button 
-        @click="elementsStore.isIllustrationsModalOpen = true"
-        class="w-full flex items-center justify-center space-x-2 py-2 px-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold shadow-md shadow-blue-500/15 transition active:scale-95"
-      >
-        <FolderOpen class="w-4 h-4" />
-        <span>Каталог 20 иллюстраций</span>
-      </button>
+      <!-- Action Buttons Grid: 20 Illustrations + Upload Custom SVG -->
+      <div class="grid grid-cols-2 gap-2">
+        <button 
+          @click="elementsStore.isIllustrationsModalOpen = true"
+          class="flex items-center justify-center space-x-1.5 py-2 px-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold shadow-md shadow-blue-500/15 transition active:scale-95 cursor-pointer"
+        >
+          <FolderOpen class="w-3.5 h-3.5" />
+          <span>Каталог 20 SVG</span>
+        </button>
+
+        <button 
+          @click="triggerSvgUpload"
+          :disabled="isUploading"
+          class="flex items-center justify-center space-x-1.5 py-2 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 text-xs font-semibold transition active:scale-95 cursor-pointer disabled:opacity-50"
+        >
+          <Upload class="w-3.5 h-3.5 text-emerald-400" />
+          <span>{{ isUploading ? 'Загрузка...' : '+ Свой SVG' }}</span>
+        </button>
+      </div>
 
       <!-- Search input -->
       <div class="relative">
@@ -92,7 +167,7 @@ async function handleDelete(e, id) {
         :key="cat"
         @click="selectedCat = cat"
         :class="selectedCat === cat ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'"
-        class="text-[11px] px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap"
+        class="text-[11px] px-2.5 py-1 rounded-lg font-medium transition whitespace-nowrap cursor-pointer"
       >
         {{ cat === 'all' ? 'Все' : cat }}
       </button>
@@ -150,7 +225,7 @@ async function handleDelete(e, id) {
         <Sparkles class="w-8 h-8 mx-auto mb-2 opacity-30 text-blue-400" />
         <p class="text-xs font-medium text-slate-400">Компоненты не найдены</p>
         <p class="text-[11px] text-slate-500 mt-1">
-          Откройте каталог 20 иллюстраций и извлеките нужные элементы
+          Откройте каталог или загрузите свой SVG для извлечения
         </p>
       </div>
     </div>

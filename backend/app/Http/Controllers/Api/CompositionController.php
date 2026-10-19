@@ -94,6 +94,6 @@ class CompositionController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Композиция удалена',
-        ]);
+        ], 200);
     }
 }

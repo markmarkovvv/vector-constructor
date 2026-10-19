@@ -91,6 +91,17 @@ export const useElementsStore = defineStore('elements', () => {
     }
   }
 
+  async function uploadIllustration(payload) {
+    try {
+      const res = await api.uploadIllustration(payload);
+      illustrations.value.unshift(res.data);
+      return res.data;
+    } catch (err) {
+      console.error('Failed to upload illustration:', err);
+      throw err;
+    }
+  }
+
   return {
     illustrations,
     selectedIllustration,
@@ -108,5 +119,6 @@ export const useElementsStore = defineStore('elements', () => {
     fetchComponents,
     saveExtractedComponent,
     deleteComponent,
+    uploadIllustration,
   };
 });
