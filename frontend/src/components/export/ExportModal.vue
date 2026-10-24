@@ -26,6 +26,7 @@ const compiledSvg = computed(() => {
     width: canvasStore.canvasWidth,
     height: canvasStore.canvasHeight,
     backgroundColor: canvasStore.backgroundColor,
+    schemeId: canvasStore.currentSchemeId,
     includeBackground: includeBackground.value,
     title: canvasStore.projectTitle,
   });

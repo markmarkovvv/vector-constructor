@@ -9,6 +9,7 @@ import LayersSidebar from './components/canvas/LayersSidebar.vue';
 import IllustrationsModal from './components/library/IllustrationsModal.vue';
 import SvgInspectorModal from './components/extractor/SvgInspectorModal.vue';
 import ExportModal from './components/export/ExportModal.vue';
+import SmartComposerModal from './components/canvas/SmartComposerModal.vue';
 
 const elementsStore = useElementsStore();
 const canvasStore = useCanvasStore();
@@ -55,6 +56,9 @@ onMounted(async () => {
 
     <!-- 3. Export to Clean Vector SVG Modal -->
     <ExportModal />
+
+    <!-- 4. Smart Auto-Composer Modal (Scenario 1 & 2) -->
+    <SmartComposerModal />
   </div>
 </template>
 
