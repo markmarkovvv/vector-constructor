@@ -1,9 +1,14 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useCanvasStore } from '../../stores/canvasStore';
+import { applyColorSchemeToSvg } from '../../utils/colorSchemes';
 
 const canvasStore = useCanvasStore();
 const canvasBoardRef = ref(null);
+
+function getElementSvg(item) {
+  return applyColorSchemeToSvg(item.svgContent, canvasStore.currentSchemeId, item.isBackground);
+}
 
 // Transform / Drag interaction state
 const isDragging = ref(false);
@@ -263,12 +268,12 @@ onUnmounted(() => {
       ref="canvasBoardRef"
       @dragover="handleDragOver"
       @drop="handleDrop"
-      class="canvas-board-bg relative shadow-2xl transition-transform origin-center select-none"
+      class="canvas-board-bg relative shadow-2xl transition-all origin-center select-none rounded-xl overflow-hidden"
       :style="{
         width: `${canvasStore.canvasWidth}px`,
         height: `${canvasStore.canvasHeight}px`,
         transform: `scale(${canvasStore.zoom})`,
-        backgroundColor: canvasStore.backgroundColor,
+        background: canvasStore.currentScheme.backgroundGradient || canvasStore.backgroundColor,
       }"
     >
       <!-- Optional Grid Overlay -->
@@ -298,14 +303,14 @@ onUnmounted(() => {
           opacity: item.opacity !== undefined ? item.opacity : 1,
         }"
       >
-        <!-- The pure vector SVG content -->
+        <!-- The pure vector SVG content dynamically recolored by current scheme -->
         <svg 
           :viewBox="item.viewBox" 
           width="100%" 
           height="100%" 
           preserveAspectRatio="xMidYMid meet"
-          class="w-full h-full pointer-events-none overflow-visible"
-          v-html="item.svgContent"
+          class="w-full h-full pointer-events-none overflow-visible transition-opacity"
+          v-html="getElementSvg(item)"
         ></svg>
 
         <!-- Selection Box with Handles (active when selected) -->
@@ -313,9 +318,30 @@ onUnmounted(() => {
           v-if="canvasStore.selectedId === item.id" 
           class="absolute inset-0 border-2 border-blue-500 pointer-events-none shadow-sm shadow-blue-500/30"
         >
-          <!-- Center label -->
-          <div class="absolute -top-6 left-0 bg-blue-600 text-white font-mono text-[10px] px-1.5 py-0.5 rounded shadow whitespace-nowrap pointer-events-none">
-            {{ item.title }} · {{ Math.round(item.width) }}×{{ Math.round(item.height) }}
+          <!-- Floating Action Pill (Main vs Background + Detail Level) -->
+          <div class="absolute -top-11 left-0 flex items-center space-x-1.5 bg-slate-900/95 backdrop-blur border border-slate-700/80 rounded-lg p-1 shadow-xl pointer-events-auto z-40 whitespace-nowrap">
+            <button 
+              @click.stop="canvasStore.toggleElementState(item.id)" 
+              :title="item.isBackground ? 'Переключить в главный объект (цветной)' : 'Переключить в фоновый объект (монохром)'"
+              class="px-2 py-0.5 rounded text-[10px] font-semibold flex items-center space-x-1 transition cursor-pointer"
+              :class="item.isBackground 
+                ? 'bg-purple-900/60 text-purple-200 border border-purple-500/40 hover:bg-purple-800' 
+                : 'bg-emerald-900/60 text-emerald-200 border border-emerald-500/40 hover:bg-emerald-800'"
+            >
+              <span>{{ item.isBackground ? '🌫️ Фоновый' : '🌟 Главный' }}</span>
+            </button>
+
+            <button 
+              @click.stop="canvasStore.toggleElementDetail(item.id)" 
+              title="Переключить детализацию объекта (Размер L / Размер S)"
+              class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 transition cursor-pointer"
+            >
+              {{ item.detailLevel || 'L' }}
+            </button>
+
+            <span class="text-[10px] font-mono text-slate-400 px-1 border-l border-slate-700">
+              {{ Math.round(item.width) }}×{{ Math.round(item.height) }}
+            </span>
           </div>
 
           <!-- Rotation Handle (top line + circle) -->

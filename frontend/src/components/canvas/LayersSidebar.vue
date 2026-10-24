@@ -143,8 +143,20 @@ function toggleLock(e, item) {
               ></svg>
             </div>
             <div class="truncate">
-              <span class="font-medium truncate block">{{ item.title }}</span>
-              <span class="text-[9px] text-slate-400 font-mono">z: {{ item.zIndex }}</span>
+              <div class="flex items-center space-x-1.5">
+                <span class="font-medium truncate block">{{ item.title }}</span>
+                <span 
+                  @click.stop="canvasStore.toggleElementState(item.id)"
+                  :class="item.isBackground 
+                    ? 'bg-purple-500/20 text-purple-300 border-purple-500/30' 
+                    : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'"
+                  class="text-[9px] px-1.5 py-0.2 rounded border font-semibold shrink-0 cursor-pointer hover:scale-105 transition"
+                  :title="item.isBackground ? 'Фоновый объект (монохром)' : 'Главный объект (полноцветный)'"
+                >
+                  {{ item.isBackground ? 'Фон' : 'Главный' }}
+                </span>
+              </div>
+              <span class="text-[9px] text-slate-400 font-mono">z: {{ item.zIndex }} · {{ item.detailLevel || 'L' }}</span>
             </div>
           </div>
 
@@ -187,6 +199,55 @@ function toggleLock(e, item) {
           <span class="text-[10px] font-mono text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">
             Объект выбран
           </span>
+        </div>
+
+        <!-- Object State & Detail Level (Figma requirements) -->
+        <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2.5">
+          <div>
+            <label class="block font-semibold text-slate-400 text-[11px] mb-1.5">
+              Состояние объекта (Figma ТЗ)
+            </label>
+            <div class="grid grid-cols-2 gap-1.5">
+              <button 
+                @click="canvasStore.updateElement(canvasStore.selectedId, { isBackground: false })"
+                :class="!canvasStore.selectedElement.isBackground 
+                  ? 'bg-emerald-600 text-white font-bold border-emerald-500 shadow-sm' 
+                  : 'bg-slate-800 text-slate-400 hover:text-white border-slate-700'"
+                class="py-1.5 px-2 rounded-lg border text-[11px] flex items-center justify-center space-x-1 transition cursor-pointer"
+              >
+                <span>🌟 Главный (Цвет)</span>
+              </button>
+              <button 
+                @click="canvasStore.updateElement(canvasStore.selectedId, { isBackground: true })"
+                :class="canvasStore.selectedElement.isBackground 
+                  ? 'bg-purple-600 text-white font-bold border-purple-500 shadow-sm' 
+                  : 'bg-slate-800 text-slate-400 hover:text-white border-slate-700'"
+                class="py-1.5 px-2 rounded-lg border text-[11px] flex items-center justify-center space-x-1 transition cursor-pointer"
+              >
+                <span>🌫️ Фоновый</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+            <span class="text-[11px] text-slate-400">Детализация:</span>
+            <div class="flex items-center space-x-1 bg-slate-900 p-0.5 rounded border border-slate-800">
+              <button 
+                @click="canvasStore.toggleElementDetail(canvasStore.selectedId)"
+                :class="(canvasStore.selectedElement.detailLevel || 'L') === 'L' ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400 hover:text-white'"
+                class="px-2 py-0.5 rounded text-[10px] font-mono transition cursor-pointer"
+              >
+                Размер L
+              </button>
+              <button 
+                @click="canvasStore.toggleElementDetail(canvasStore.selectedId)"
+                :class="(canvasStore.selectedElement.detailLevel || 'L') === 'S' ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400 hover:text-white'"
+                class="px-2 py-0.5 rounded text-[10px] font-mono transition cursor-pointer"
+              >
+                Размер S
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- Position X, Y -->

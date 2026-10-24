@@ -1,6 +1,16 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { api } from '../services/api';
+import { ISOMETRIC_COMPONENTS } from '../utils/isometricLibrary';
+
+// Pre-packaged Authentic Isometric Figma Design System Components
+const BUILT_IN_COMPONENTS = ISOMETRIC_COMPONENTS.map((comp) => ({
+  ...comp,
+  svg_content: comp.svg_l,
+  isBuiltIn: true,
+}));
+
+const BUILT_IN_CATEGORIES = Array.from(new Set(BUILT_IN_COMPONENTS.map((c) => c.category)));
 
 export const useElementsStore = defineStore('elements', () => {
   // State
@@ -8,8 +18,9 @@ export const useElementsStore = defineStore('elements', () => {
   const selectedIllustration = ref(null);
   const isLoadingIllustrations = ref(false);
 
-  const components = ref([]);
-  const categories = ref([]);
+  // Initialize with built-in Figma items so they are immediately available
+  const components = ref([...BUILT_IN_COMPONENTS]);
+  const categories = ref([...BUILT_IN_CATEGORIES]);
   const activeCategory = ref('all');
   const searchQuery = ref('');
   const isLoadingComponents = ref(false);
@@ -58,8 +69,14 @@ export const useElementsStore = defineStore('elements', () => {
     isLoadingComponents.value = true;
     try {
       const res = await api.getComponents(activeCategory.value, searchQuery.value);
-      components.value = res.data;
-      categories.value = res.categories || [];
+      const apiComps = res.data || [];
+      // Combine built-in components and user/extracted components
+      const apiIds = new Set(apiComps.map((c) => c.id));
+      const remainingBuiltIns = BUILT_IN_COMPONENTS.filter((c) => !apiIds.has(c.id));
+      components.value = [...remainingBuiltIns, ...apiComps];
+
+      const mergedCats = new Set([...BUILT_IN_CATEGORIES, ...(res.categories || [])]);
+      categories.value = Array.from(mergedCats);
     } catch (err) {
       console.error('Failed to load components:', err);
     } finally {
@@ -82,6 +99,11 @@ export const useElementsStore = defineStore('elements', () => {
   }
 
   async function deleteComponent(id) {
+    const isBuiltIn = components.value.find((c) => c.id === id)?.isBuiltIn;
+    if (isBuiltIn) {
+      components.value = components.value.filter((c) => c.id !== id);
+      return;
+    }
     try {
       await api.deleteComponent(id);
       components.value = components.value.filter((c) => c.id !== id);

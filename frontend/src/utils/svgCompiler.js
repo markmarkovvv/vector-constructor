@@ -1,12 +1,16 @@
 /**
  * Compiles canvas layers into a valid, standalone, scalable SVG vector document.
+ * Adheres strictly to the vector constraint (100% pure SVG paths, no rasterization).
  */
+
+import { applyColorSchemeToSvg } from './colorSchemes';
 
 export function compileToSvg(elements, options = {}) {
   const {
-    width = 1200,
+    width = 800,
     height = 800,
-    backgroundColor = '#ffffff',
+    backgroundColor = '#C7C5FF',
+    schemeId = 'lavender',
     includeBackground = true,
     title = 'Vector Composition',
   } = options;
@@ -43,10 +47,13 @@ export function compileToSvg(elements, options = {}) {
         transformStr += ` scale(${sx}, ${sy})`;
       }
 
-      return `  <!-- Layer: ${escapeXml(item.title || 'Element')} -->
+      // Apply color scheme and monochrome state (Main vs Background)
+      const coloredContent = applyColorSchemeToSvg(item.svgContent, schemeId, item.isBackground);
+
+      return `  <!-- Layer: ${escapeXml(item.title || 'Element')} [${item.isBackground ? 'Фоновый' : 'Главный'}] -->
   <g transform="${transformStr}" opacity="${opacity}">
     <svg width="${item.width}" height="${item.height}" viewBox="${item.viewBox || `0 0 ${item.width} ${item.height}`}" preserveAspectRatio="xMidYMid meet">
-      ${item.svgContent}
+      ${coloredContent}
     </svg>
   </g>`;
     })
@@ -60,7 +67,7 @@ export function compileToSvg(elements, options = {}) {
      width="${width}" 
      height="${height}">
   <title>${escapeXml(title)}</title>
-  <desc>Created with Vector Constructor (MVP)</desc>
+  <desc>Created with Vector Constructor (MVP Figma Design System)</desc>
   ${defsString ? `<defs>\n${defsString}\n  </defs>` : ''}
   ${includeBackground ? `<rect width="${width}" height="${height}" fill="${backgroundColor}" />` : ''}
 
